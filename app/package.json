@@ -1,0 +1,40 @@
+{
+  "name": "Mail-Client",
+  "productName": "Mail Client",
+  "version": "1.0.0",
+  "description": "General Use MailClient",
+  "main": "main.js",
+  "author": "Lucas Bledsoe Inc.",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.3.4",
+    "jquery": "^1.7.4"
+  },
+  "dependencies": {
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8",
+    "react-loading": "0.0.9",
+    "async": "^2.0.1",
+    "electron-log": "^1.1.1",
+    "jquery": "^1.12.4",
+    "jszip": "^3.1.2",
+    "mysql": "^2.11.1",
+    "request": "^2.75.0",
+    "rimraf": "^2.5.4",
+    "targz": "^1.0.1",
+    "unzip": "^0.1.11"
+  }
+}

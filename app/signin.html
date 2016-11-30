@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Appvance</title>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script>if (window.module) module = window.module;</script>
+
+    <link href="basic-template.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+        <div class="row centered-form">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Please provide the company name email you registered on Appvance.com</h3>
+            </div>
+            <div class="panel-body">
+              <h5 class="warning" id="warningRegister"></h5>
+              <h5 id="information"></h5>
+              <form role="form">
+                <div class="form-group">
+                  <input type="text" name="companyName" id="companyName" class="form-control input-sm" placeholder="Company Name">
+                  <text class="warning" id="companyWarning"></text>
+                </div>
+
+                <div class="form-group">
+                  <input type="text" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+                  <text class="warning" id="emailWarning"></text>
+                </div>   
+
+                <div class="form-group"> 
+                  <label class="col-xs-12 control-label" for="singlebutton">
+                    <!-- <div class="col-md-4 center-block"> -->
+                      <button type="button" name="singlebutton" value="Submit" class="btn btn-info btn-block">Submit</button>
+                    <!-- </div> -->
+                  </div>
+                </label>
+              </form>
+              <script>
+                const ipcRenderer = require('electron').ipcRenderer;
+                let submit = document.getElementsByTagName("button")[0];
+                let companyNameField = document.getElementById('companyName');
+                let emailField = document.getElementById('email');
+                let mainWarning = document.getElementById('warningRegister');
+                let information = document.getElementById('information');
+                let companyWarning = document.getElementById('companyWarning');
+                let emailWarning = document.getElementById('emailWarning');
+                let valid_email = false;
+
+                let submitAction = function(){
+                  if(!companyNameField.value){
+                    companyNameField.style.border = "1px solid red";
+                    companyWarning.innerHTML = 'Please provide a company Name.';
+                  } else{
+                    companyWarning.innerHTML ='';
+                  }
+
+                  if(emailField.value && (/[^\s@]+@[^\s@]+\.[^\s@]+/.test(emailField.value))){
+                    valid_email = true;
+                    emailWarning.innerHTML = "";
+                  }  else {
+                    emailField.style.border = "1px solid red";
+                    emailWarning.innerHTML = 'Please provide a valid email.';
+                    valid_email = false;
+                  } 
+                  if(valid_email && companyNameField.value){
+                    ipcRenderer.send('register',{companyName:companyNameField.value, userName:emailField.value});
+                    companyWarning.innerHTML = "";
+                    emailWarning.innerHTML = "";
+                    mainWarning.innerHTML = "";
+                    information.innerHTML = "Verifying information...";
+                  }
+                };
+                submit.addEventListener("click", submitAction);
+                document.addEventListener("keypress", function(e){
+                  if (e.keyCode === 13){
+                    submitAction();
+                  }
+                });
+
+
+                ipcRenderer.on('registerResult', (event, arg) =>{
+                  if (!arg.success){
+                    mainWarning.innerHTML = "Unable to verify provided details. Please confirm information and re-enter.";
+                    companyWarning.innerHTML = 'Please provide a company Name.';
+                    emailWarning.innerHTML = 'Please provide an email.';
+                    if (arg.information){
+                      information.innerHTML = arg.information;
+                    } else{
+                      information.innerHTML = "";
+                    }
+                  } else{
+                    information.innerHTML = "Verified, Loading Appvance..."
+                  }
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

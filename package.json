@@ -6,7 +6,7 @@
     "electron-packager": "^8.0.0"
   },
   "devDependencies": {
-    "electron": "^1.4.1",
+    "electron": "^9.1.0",
     "electron-prebuilt": "^1.4.1",
     "electron-winstaller": "^2.3.4",
     "babel-preset-es2015": "^6.9.0",
